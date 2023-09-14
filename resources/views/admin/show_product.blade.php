@@ -18,12 +18,12 @@
 
         }
         .img {
-        width: 20%;
-        height: 20%;
+        width: 150px;
+        height: 150px;
         }
         .th_color{
             background: skyblue;
-            
+
         }
    </style>
   </head>
@@ -36,6 +36,13 @@
         <!-- partial -->
         <div class="main-panel">
             <div class="content-wrapper">
+                @if(session()->has('message'))
+                <div class="alert alert-success">
+                    <button type="button" class="close" data-dismiss='alert'
+                    aria-hidden="true">x</button>
+                    {{ session()->get('message') }}
+                </div>
+                @endif
                 <h2 class="h2_font">All Product</h2>
                 <table class="center">
                     <tr class="th_color">
@@ -46,6 +53,8 @@
                         <th>Price</th>
                         <th>Discount Price</th>
                         <th>Product Image</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                     @foreach ($data as $data)
                     <tr>
@@ -55,8 +64,16 @@
                         <td>{{ $data->category }}</td>
                         <td>{{ $data->price }}</td>
                         <td>{{ $data->discount_price }}</td>
-                        <td class="img">
-                            <img  src="/product/{{ $data->image }}" />
+                        <td >
+                            <img class="img" src="/product/{{ $data->image }}" />
+                        </td>
+                        <td><a class="btn btn-success"
+                            href="{{ url('update_product',$data->id) }}">Edit</a>
+                        </td>
+                        <td>
+                            <a onclick="return confirm('Are you sure to delete Product ? ')"
+                            class="btn btn-danger"
+                            href="{{ url('delete_product',$data->id) }}">Delete</a>
                         </td>
                     </tr>
                     @endforeach
