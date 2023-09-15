@@ -11,8 +11,8 @@
              <div class="box">
                 <div class="option_container">
                    <div class="options">
-                      <a href="" class="option1">
-                      {{ $products->category }}
+                      <a href="{{ url('product_detail',$products->id) }}" class="option1">
+                     Product Detail
                       </a>
                       <a href="" class="option2">
                       Buy Now
@@ -27,7 +27,7 @@
                     {{$products->title }}
                    </h5>
                    @if ($products->discount_price != null)
-                   <h6>
+                   <h6 style="color: red;">
                     ${{$products->discount_price }}
                  </h6>
                  <h6 style="text-decoration:line-through;">
