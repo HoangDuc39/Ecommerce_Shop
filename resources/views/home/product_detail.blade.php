@@ -27,8 +27,14 @@
          <!-- header section strats -->
          @include('home.header')
          <!-- end header section -->
-
-      <div class="col-sm-6 col-md-4 col-lg-4 " style="margin: auto;padding:30px;">
+         @if(session()->has('message'))
+         <div class="alert alert-success">
+             <button type="button" class="close" data-dismiss='alert'
+             aria-hidden="true">x</button>
+             {{ session()->get('message') }}
+         </div>
+         @endif
+      <div class="col-sm-6 col-md-4 col-lg-7 " style="margin: auto;padding:30px;">
         <div class="box" style="display:flex;">
            <div class="option_container">
 
@@ -55,7 +61,17 @@
                <h6>Product Category:{{$product->category }}</h6>
                <h6>Product Description:{{$product->description }}</h6>
                <h6>Available Quantity:{{$product->quantity }}</h6>
-                  <a href="" class="btn btn-primary">Add to Cart</a>
+               <form action="{{ url('add_cart',$product->id) }}" method="POST">
+                @csrf
+                <div >
+                    <div >
+                        <input type="number" name="quantity" value="1" min="1" style="width: 30%">
+                    </div>
+                    <div >
+                        <input type="submit" value="Add to Cart">
+                    </div>
+                </div>
+            </form>
            </div>
         </div>
      </div>
