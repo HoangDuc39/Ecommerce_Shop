@@ -26,7 +26,9 @@
                 <li class="nav-item">
                    <a class="nav-link" href="contact.html">Contact</a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('show_cart') }}">Cart</a>
+                 </li>
                  @if (Route::has('login'))
                  @auth
                  <li class="nav-item">
