@@ -44,6 +44,13 @@
         <!-- partial -->
         <div class="main-panel">
             <div class="content-wrapper">
+                @if(session()->has('message'))
+                <div class="alert alert-success">
+                    <button type="button" class="close" data-dismiss='alert'
+                    aria-hidden="true">x</button>
+                    {{ session()->get('message') }}
+                </div>
+                @endif
                 <h2 class="h2_font">All Order</h2>
                 <table class="center">
                     <tr class="th_color">
@@ -57,6 +64,7 @@
                         <th>Payment Status</th>
                         <th>Delivery Status</th>
                         <th>Image</th>
+                        <th>Delivered</th>
                     </tr>
                     @foreach ($order as $order)
                         <tr>
@@ -71,6 +79,16 @@
                             <td>{{ $order->delivery_status }}</td>
                             <td>
                                 <img class="img" src="/product/{{ $order->image }}" />
+                            </td>
+                            <td>
+                                @if($order->delivery_status == 'processing')
+                                <a
+                                onclick="return confirm('Are you sure this Product is delivered ?')"
+                                href="{{ url('delivered',$order->id) }}"
+                                class="btn btn-primary">Delivered</a>
+                               @else
+                               <p style="color: green;">Delivered</p>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
