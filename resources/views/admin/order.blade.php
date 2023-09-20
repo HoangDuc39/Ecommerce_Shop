@@ -55,6 +55,13 @@
                 </div>
                 @endif
                 <h2 class="h2_font">All Order</h2>
+                <div style="margin:auto;padding-bottom:30px;">
+                    <form action="{{ url('search') }}" method="GET">
+                        @csrf
+                        <input type="text" style="color: black;" name="search" placeholder="Search ...">
+                        <input type="submit" value="Search" class="btn btn-outline-primary">
+                    </form>
+                </div>
                 <table class="center">
                     <tr class="th_color">
                         <th>Name</th>
@@ -70,7 +77,7 @@
                         <th>Delivered</th>
                         <th>Print PDF</th>
                     </tr>
-                    @foreach ($order as $order)
+                    @forelse ($order as $order)
                         <tr>
                             <td>{{ $order->name }}</td>
                             <td>{{ $order->email }}</td>
@@ -98,7 +105,13 @@
                                 <a href="{{ url('print_pdf',$order->id) }}" class="btn btn-secondary">Print</a>
                             </td>
                         </tr>
-                    @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="16">
+                                <p>No Data Found</p>
+                            </td>
+                        </tr>
+                    @endforelse
 
                 </table>
             </div>
