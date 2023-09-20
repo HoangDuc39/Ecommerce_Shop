@@ -8,6 +8,9 @@
         table,th,td{
             border: 1px solid white;;
         }
+        th{
+            padding: 10px;
+        }
         .center {
             margin: auto;
             width: 100%;
@@ -65,6 +68,7 @@
                         <th>Delivery Status</th>
                         <th>Image</th>
                         <th>Delivered</th>
+                        <th>Print PDF</th>
                     </tr>
                     @foreach ($order as $order)
                         <tr>
@@ -89,6 +93,9 @@
                                @else
                                <p style="color: green;">Delivered</p>
                                 @endif
+                            </td>
+                            <td>
+                                <a href="{{ url('print_pdf',$order->id) }}" class="btn btn-secondary">Print</a>
                             </td>
                         </tr>
                     @endforeach

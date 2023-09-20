@@ -40,6 +40,7 @@ Route::get('/update_product/{id}',[AdminController::class,'update_product']);
 Route::post('/update_product_confirm/{id}',[AdminController::class,'update_product_confirm']);
 Route::get('/view_order',[AdminController::class,'view_order']);
 Route::get('/delivered/{id}',[AdminController::class,'delivered']);
+Route::get('/print_pdf/{id}',[AdminController::class,'print_pdf']);
 
 //HomeController
 Route::get('/product_detail/{id}',[HomeController::class,'product_detail']);
