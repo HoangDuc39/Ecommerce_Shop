@@ -10,39 +10,49 @@ use App\Models\Cart;
 use App\Models\Order;
 use Session;
 use Stripe;
+
 class HomeController extends Controller
 {
 
-    public function index(){
-        $product=Product::paginate(10);
-        return view('home.userpage',compact('product'));
+    public function index()
+    {
+        $product = Product::paginate(10);
+        return view('home.userpage', compact('product'));
     }
 
     public function redirect()
     {
         $usertype = Auth::user()->usertype;
 
-        if($usertype=='1')
-        {
-            return view('admin.home');
-        }
-        else
-        {
-            $product=Product::paginate(10);
-            return view('home.userpage',compact('product'));
+        if ($usertype == '1') {
+            $total_product = product::all()->count();
+            $total_order = order::all()->count();
+            $total_user = user::all()->count();
+            $order=order::all();
+            $total_revenue=0;
+            foreach($order as $order)
+            {
+                $total_revenue+=$order->price;
+            }
+            $total_delivered = order::where('delivery_status','=','delivered')->get()->count();
+            $total_processing = order::where('delivery_status','=','processing')->get()->count();
+            return view('admin.home', compact('total_product', 'total_order',
+             'total_user','total_revenue','total_delivered','total_processing'));
+        } else {
+            $product = Product::paginate(10);
+            return view('home.userpage', compact('product'));
         }
     }
     public function product_detail($id)
     {
-        $product=Product::find($id);
-        return view('home.product_detail',compact('product'));
+        $product = Product::find($id);
+        return view('home.product_detail', compact('product'));
     }
     public function add_cart(Request $request, $id)
     {
-        if(Auth::id())
-        {
+        if (Auth::id()) {
             $user = Auth::user();
-            $product=product::find($id);
+            $product = product::find($id);
             $cart = new cart;
             $cart->name = $user->name;
             $cart->email = $user->email;
@@ -50,53 +60,43 @@ class HomeController extends Controller
             $cart->address = $user->address;
             $cart->user_id = $user->id;
 
-            $cart->product_title=$product->title;
-            if($product->discount_price!=null)
-            {
-                $cart->price=$product->discount_price * $request->quantity;
-            }
-            else
-            {
-                $cart->price=$product->price * $request->quantity;
+            $cart->product_title = $product->title;
+            if ($product->discount_price != null) {
+                $cart->price = $product->discount_price * $request->quantity;
+            } else {
+                $cart->price = $product->price * $request->quantity;
             }
 
-            $cart->image=$product->image;
-            $cart->product_id=$product->id;
-            $cart->quantity=$request->quantity;
+            $cart->image = $product->image;
+            $cart->product_id = $product->id;
+            $cart->quantity = $request->quantity;
             $cart->save();
             return redirect()->back()->with('message', 'Add to Cart Successfully');
-        }
-        else
-        {
+        } else {
             return redirect('login');
         }
     }
     public function show_cart()
     {
-        if(Auth::id())
-        {
-        $id=Auth::user()->id;
-        $cart=cart::where('user_id','=',$id)->get();
-        return view('home.show_cart',compact('cart'));
-        }
-        else
-        {
+        if (Auth::id()) {
+            $id = Auth::user()->id;
+            $cart = cart::where('user_id', '=', $id)->get();
+            return view('home.show_cart', compact('cart'));
+        } else {
             return redirect('login');
         }
-
     }
     public function remove_cart($id)
     {
-        $cart= cart::find($id);
+        $cart = cart::find($id);
         $cart->delete();
         return redirect()->back();
     }
     public function cash_order()
     {
-        $id=Auth::user()->id;
-        $data=cart::where('user_id','=',$id)->get();
-        foreach($data as $data)
-        {
+        $id = Auth::user()->id;
+        $data = cart::where('user_id', '=', $id)->get();
+        foreach ($data as $data) {
             $order = new order;
             $order->name = $data->name;
             $order->email = $data->email;
@@ -113,16 +113,16 @@ class HomeController extends Controller
             $order->save();
 
             $cart_id = $data->id;
-            $cart=cart::find($cart_id);
+            $cart = cart::find($cart_id);
             $cart->delete();
         }
-        return redirect()->back()->with('message','Received Order Successfully');
+        return redirect()->back()->with('message', 'Received Order Successfully');
     }
     public function stripe($total_price)
     {
-        return view('home.stripe',compact('total_price'));
+        return view('home.stripe', compact('total_price'));
     }
-    public function stripePost(Request $request,$total_price)
+    public function stripePost(Request $request, $total_price)
 
     {
 
@@ -130,22 +130,21 @@ class HomeController extends Controller
 
 
 
-        Stripe\Charge::create ([
+        Stripe\Charge::create([
 
-                "amount" => $total_price * 100,
+            "amount" => $total_price * 100,
 
-                "currency" => "usd",
+            "currency" => "usd",
 
-                "source" => $request->stripeToken,
+            "source" => $request->stripeToken,
 
-                "description" => "Thanks for payment."
+            "description" => "Thanks for payment."
 
         ]);
 
-        $id=Auth::user()->id;
-        $data=cart::where('user_id','=',$id)->get();
-        foreach($data as $data)
-        {
+        $id = Auth::user()->id;
+        $data = cart::where('user_id', '=', $id)->get();
+        foreach ($data as $data) {
             $order = new order;
             $order->name = $data->name;
             $order->email = $data->email;
@@ -162,7 +161,7 @@ class HomeController extends Controller
             $order->save();
 
             $cart_id = $data->id;
-            $cart=cart::find($cart_id);
+            $cart = cart::find($cart_id);
             $cart->delete();
         }
 
@@ -170,8 +169,25 @@ class HomeController extends Controller
 
 
         return back();
-
     }
-
-
+    public function show_order()
+    {
+        if(Auth::id())
+        {
+            $id = Auth::user()->id;
+            $order = order::where('user_id', '=', $id)->get();
+            return view('home.order',compact('order'));
+        }
+        else
+        {
+            return redirect('login');
+        }
+    }
+    public function cancel_order($id)
+    {
+        $order = order::find($id);
+        $order->delivery_status = 'Cancel Order';
+        $order->save();
+        return redirect()->back()->with('message', 'Cancel Order Successfully');
+    }
 }

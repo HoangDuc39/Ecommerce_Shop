@@ -30,7 +30,7 @@
             table-layout: fixed;
             margin: auto;
             border: 1px solid black;
-            width:60%;
+            width:70%;
         }
         .th_deg
         {
@@ -71,41 +71,49 @@
                 <th class="th_deg">Product title</th>
                 <th class="th_deg">Quantity</th>
                 <th class="th_deg">Price</th>
+                <th class="th_deg">Payment status</th>
+                <th class="th_deg">Delivery status</th>
                 <th class="th_deg">Image</th>
-                <th class="th_deg">Action</th>
+                <th class="th_deg">Cancel Order</th>
             </tr>
             <?php $total_price=0; ?>
-            @forelse ($cart as $cart)
+            @forelse ($order as $order)
             <tr>
-                <th>{{ $cart->product_title}}</th>
-                <th>{{ $cart->quantity}}</th>
-                <th>${{ $cart->price}}</th>
-                <th><img class="img_deg" src="/product/{{ $cart->image }}"></th>
+                <th>{{ $order->product_title}}</th>
+                <th>{{ $order->quantity}}</th>
+                <th>${{ $order->price}}</th>
+                <th>{{ $order->payment_status}}</th>
+                <th>{{ $order->delivery_status}}</th>
+                <th><img class="img_deg" src="/product/{{ $order->image }}"></th>
                 <th>
+                    @if($order->delivery_status == 'processing')
                     <a
-                    onclick="return confirm('Are you sure to remove this Product?')"
+                    onclick="return confirm('Are you sure cancel this Order?')"
                     class="btn btn-danger"
-                    href="{{ url('remove_cart', $cart->id) }}">Remove</a>
+                    href="{{ url('cancel_order', $order->id) }}">Cancel Order</a>
+                    @else
+                    <p></p>
+                    @endif
                 </th>
             </tr>
-            <?php $total_price=$total_price + $cart->price ?>
+
             @empty
                         <tr>
                             <td colspan="12">
-                                <p style="color: red;padding:20px;">No Product in your Cart</p>
+                                <p style="color: red;padding:20px;">You don't have order</p>
                             </td>
                         </tr>
             @endforelse
 
         </table>
-        <div>
+        {{-- <div>
             <h1 class="total_deg">Total Price: ${{ $total_price }}</h1>
-        </div>
-        <div>
+        </div> --}}
+        {{-- <div>
             <h1 style="font-size: 23px;padding-bottom:15px;">Proceed to Order</h1>
             <a href="{{ url('cash_order') }}" class="btn btn-danger">Cash On Delivery</a>
             <a href="{{ url('stripe',$total_price) }}" class="btn btn-danger">Pay Using Card</a>
-        </div>
+        </div> --}}
       </div>
       <!-- footer start -->
       @include('home.footer')

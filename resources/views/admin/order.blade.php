@@ -107,7 +107,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="16">
+                            <td colspan="12">
                                 <p>No Data Found</p>
                             </td>
                         </tr>

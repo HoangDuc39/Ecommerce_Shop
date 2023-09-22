@@ -14,7 +14,7 @@ use App\Http\Controllers\AdminController;
 |
 */
 
-Route::get('/',[HomeController::class,'index']);
+
 
 Route::middleware([
     'auth:sanctum',
@@ -25,7 +25,7 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
-
+Route::get('/',[HomeController::class,'index']);
 Route::get('/redirect',[HomeController::class,'redirect'])->middleware('auth','verified');
 
 Route::get('/view_category',[AdminController::class,'view_category']);
@@ -50,3 +50,5 @@ Route::get('/remove_cart/{id}',[HomeController::class,'remove_cart']);
 Route::get('/cash_order',[HomeController::class,'cash_order']);
 Route::get('/stripe/{total_price}',[HomeController::class,'stripe']);
 Route::post('/stripe/{total_price}',[HomeController::class,'stripePost'])->name('stripe.post');
+Route::get('/show_order',[HomeController::class,'show_order']);
+Route::get('/cancel_order/{id}',[HomeController::class,'cancel_order']);
