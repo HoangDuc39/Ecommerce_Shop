@@ -4,6 +4,14 @@
             <h2>
                 Our <span>products</span>
             </h2>
+            <br><br>
+            <div>
+                <form action="{{ url('product_search') }}"  method="GET">
+                    @csrf
+                    <input type="text" style="width: 500px;" name="search" placeholder="Search Product...">
+                    <input type="submit" value="search">
+                </form>
+            </div>
         </div>
         <div class="row">
             @foreach ($product as $products)
@@ -14,7 +22,7 @@
                                 <a href="{{ url('product_detail', $products->id) }}" class="option1">
                                     Product Detail
                                 </a>
-                                
+
                             </div>
                         </div>
                         <div class="img-box">
