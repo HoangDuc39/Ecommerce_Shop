@@ -6,7 +6,7 @@
    <style type="text/css">
     .center{
         margin: auto;
-        width: 80%;
+        width: 100%;
         border: 2px solid white;
         text-align: center;
         margin-top: 20px;
@@ -17,13 +17,19 @@
             text-align: center;
 
         }
+        table,th,td{
+            border: 1px solid white;;
+        }
+        th{
+            padding: 10px;
+        }
         .img {
         width: 150px;
         height: 150px;
         }
         .th_color{
             background: skyblue;
-
+            padding: 10px;
         }
    </style>
   </head>

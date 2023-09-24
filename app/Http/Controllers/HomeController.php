@@ -10,7 +10,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use Session;
 use Stripe;
-
+use RealRashid\SweetAlert\Facades\Alert;
 class HomeController extends Controller
 {
 
@@ -66,7 +66,8 @@ class HomeController extends Controller
                     $cart->price = $product->price * $cart->quantity;
                 }
                 $cart->save();
-                return redirect()->back()->with('message', 'Add to Cart Successfully');
+                Alert::success('Product Added Successfully','See your product in Cart');
+                return redirect()->back();
             }
             else
             {
@@ -88,7 +89,8 @@ class HomeController extends Controller
                 $cart->product_id = $product->id;
                 $cart->quantity = $request->quantity;
                 $cart->save();
-                return redirect()->back()->with('message', 'Add to Cart Successfully');
+                Alert::success('Product Added Successfully','See your product in Cart');
+                return redirect()->back();
             }
 
 

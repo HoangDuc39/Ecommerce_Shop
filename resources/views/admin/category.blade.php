@@ -16,6 +16,16 @@
         .input_color{
             color: black;
         }
+        table,th,td{
+            border: 1px solid white;;
+        }
+        td{
+            padding: 10px;
+        }
+        .th_color {
+            background: skyblue;
+
+        }
         .center{
             margin: auto;
             width: 50%;
@@ -52,7 +62,7 @@
                 </div>
 
                 <table class="center">
-                    <tr>
+                    <tr class="th_color">
                         <td>Category Name</td>
                         <td>Action</td>
                     </tr>
